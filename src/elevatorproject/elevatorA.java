@@ -1,0 +1,280 @@
+
+package elevatorproject;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+
+public class elevatorA extends Thread{
+    //destination floor, current floor of lift, call from which floor, number of passengers, number of next floor lift is going to
+    int destFloor, currFloor, callFloor,passengerCount, nextFloor; 
+    char dir;
+    boolean isOverweight, isMoving, isStuck, isSurgeon, isEmpty;
+    ArrayList<Integer> callArr = new ArrayList<Integer>();  //array to store call floors
+    ArrayList<Integer> destArr = new ArrayList<Integer>(); //array to store destination floors
+    ArrayList<Integer> currArr = new ArrayList<Integer>();
+    
+    public elevatorA(){
+        this.isEmpty = true;
+        //System.out.println("Elevator A is created");
+        operate();
+    }
+    
+    public elevatorA(int destination, int callFloor){
+        setDest(destination);
+        setCall(callFloor);
+    }
+    
+    //--------------------------get Methods---------------------------------------
+    //returns destination floor
+    public int getDest(){
+        return this.destFloor;
+    }
+    
+    //returns current floor lift is at
+    public int getCurr(){
+        return this.currFloor;
+    }
+    
+    //returns floor the call is coming from
+    public int getCall(){
+        return this.callFloor;
+    }
+    
+    //returns number of passengers in the lift
+    public int getPassCount(){
+        return this.passengerCount;
+    }
+    
+    //returns next call
+    public int getNext(){
+        return this.nextFloor;
+    }
+    
+    //returns direction the lift is going
+    public char getDir(){
+        return this.dir;
+    }
+    
+    //returns the lift call array
+    public ArrayList getCallArr(){
+        return callArr;
+    }
+    
+    //**************************set Methods***************************************
+    public void setDest(int dest){
+        this.destFloor = dest;
+    }
+    
+    public void setCurr(int curr){
+        this.currFloor = curr;
+    }
+    
+    public void setCall(int call){
+        this.callFloor = call;
+    }
+    
+    public void setPassCount(int count){
+        this.passengerCount = count;
+    }
+    
+    public void setNext(int next){
+        this.nextFloor = next;
+    }
+    
+    public void setDir(char direction){
+        this.dir = direction;
+    }
+    
+    public void setOverw(boolean status){
+        isOverweight = status;
+    }
+    
+    public void setMoving(boolean status){
+        isMoving = status;
+    }
+    
+    public void setStuck(boolean status){
+        isStuck = status;
+    }
+    
+    public void setSurgeon(boolean status){
+        isSurgeon = status;
+    }
+    
+    public void setCalls(int newCall){
+        
+    }
+    
+    
+    //================FUNCTIONS==================================
+    
+    //random floor generator for testing purposes
+    public void randFloor(){
+        // int dest = (int)(Math.random() * 4 +1); //generate numbers 1 to 4
+        // int curr = (int)(Math.random() * 4 +1);
+        // int call = (int)(Math.random() * 4 +1);
+        // setDest(dest);
+        // setCurr(curr);
+        // setCall(call);
+
+        //randomize 4 values into an array
+        for(int i = 0; i <4; i++){
+            int dest = (int)(Math.random() * 4 +1); //generate numbers 1 to 4
+            int call = (int)(Math.random() * 4 +1);
+            callArr.add(call);
+            destArr.add(dest);
+        }
+
+        int curr = (int)(Math.random() * 4 +1);
+        currArr.add(curr);
+
+    }
+    
+    //adding a floor to the call array
+    public void addCall(){
+        
+    }
+    
+    //function for elevator operation
+    public void operate(){
+        randFloor(); //generate random floor *TESTING*
+        System.out.println("Elevator at: " + getCurr() + " Call coming from " + getCall() + " Destination: " + getDest());
+        
+        /*op: add destination to call array -> 
+        add call floor to array -> list reaches call floor -> push call floor out from array    */
+
+        if(getCall() > getDest()){  //elevator go downwards
+            moveDown();
+        }else if (getCall() < getDest()){   //elevator go upwards
+            moveUp();
+        }else{
+            System.out.println("Lift is at Destination Floor");
+        }
+        
+       
+    }
+    
+    //processes elevator UP operations (when destination is above call floor)
+    public void moveUp(){
+        setDir('u'); //set direction to up
+        int begin = getCurr();
+
+        //for elevator to go to the call floor
+        if(begin < getCall()){
+            for(int i = begin; i <= getCall(); i++){
+                try {
+                    setCurr(i);
+                    System.out.println("Lift is at floor "+ i);
+                    Thread.sleep(1000);
+                } catch(InterruptedException e){
+                    e.printStackTrace();
+                }
+            }
+        }else if(begin > getCall()){
+            for(int i = begin; i >= getCall(); i--){
+                try {
+                    setCurr(i);
+                    System.out.println("Lift is at floor "+ i);
+                    Thread.sleep(1000);
+                } catch(InterruptedException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        System.out.println("Lift picks up passenger at floor "+ getCurr());
+        begin = getCurr(); //when lift has reached call floor
+
+        //lift proceeds to UPWARDS Destination
+        for(int i = begin +1; i <= getDest(); i++){
+            try {
+                setCurr(i);
+                System.out.println("Lift is at floor "+ i);
+                Thread.sleep(1000);
+            } catch(InterruptedException e){
+                e.printStackTrace();
+            }
+        }
+
+        returnFloor();
+       
+    }
+    
+    public void moveDown(){
+        setDir('d'); //set direction to down
+        int begin = getCurr();
+
+        //for elevator to go to the call floor
+        if(begin < getCall()){
+            for(int i = begin; i >= getCall(); i++){
+                try {
+                    setCurr(i);
+                    System.out.println("Lift is at floor "+ i);
+                    Thread.sleep(1000);
+                } catch(InterruptedException e){
+                    e.printStackTrace();
+                }
+            }
+        }else if(begin > getCall()){
+            for(int i = begin; i <= getCall(); i--){
+                try {
+                    setCurr(i);
+                    System.out.println("Lift is at floor "+ i);
+                    Thread.sleep(1000);
+                } catch(InterruptedException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        System.out.println("Lift picks up passenger at floor "+ getCurr());
+        begin = getCurr(); //when lift has reached call floor
+
+        //lift proceeds to DOWNWARDS Destination
+
+        for(int i = begin -1; i >= getDest(); i--){
+            try {
+                setCurr(i);
+                System.out.println("Lift is at floor "+ i);
+                Thread.sleep(1000);
+            } catch(InterruptedException e){
+                e.printStackTrace();
+            }
+        }
+
+        returnFloor();
+    }
+    
+    //return lift to floor 1
+    public void returnFloor(){
+        if(this.isEmpty){ //if no more calls
+            System.out.println("No More calls, lift returning to ground floor");
+
+            while(getCurr() != 1){
+                try {
+                    int i = getCurr();
+                    i--;
+                    setCurr(i);
+                    System.out.println("Lift is at floor "+ i);  
+                    Thread.sleep(1000);                
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+    }
+    
+    public void overrideFloor(int floor){
+        setNext(floor);
+    }
+
+    //function to sort the destination and call numbers into array
+    public void sortArray(){
+
+    }
+    
+    
+    
+}

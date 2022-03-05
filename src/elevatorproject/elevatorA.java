@@ -2,18 +2,19 @@
 package elevatorproject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
+
+import javax.crypto.spec.DESKeySpec;
 
 
 public class elevatorA extends Thread{
     //destination floor, current floor of lift, call from which floor, number of passengers, number of next floor lift is going to
-    int destFloor, currFloor, callFloor,passengerCount, nextFloor; 
-    char dir;
+    int destFloor, currFloor, callFloor,passengerCount, nextFloor, dir;
     boolean isOverweight, isMoving, isStuck, isSurgeon, isEmpty;
-    ArrayList<Integer> callArr = new ArrayList<Integer>();  //array to store call floors
-    ArrayList<Integer> destArr = new ArrayList<Integer>(); //array to store destination floors
-    ArrayList<Integer> currArr = new ArrayList<Integer>();
-    
+    ArrayList<Integer> callArr = new ArrayList<Integer>(Arrays.asList(new Integer[]{4,2,3,1})) ;  //array to store call floors
+    ArrayList<Integer> destArr = new ArrayList<Integer>(Arrays.asList(new Integer[]{1,3,2,4})); //array to store destination floors
+  
     public elevatorA(){
         this.isEmpty = true;
         //System.out.println("Elevator A is created");
@@ -52,7 +53,7 @@ public class elevatorA extends Thread{
     }
     
     //returns direction the lift is going
-    public char getDir(){
+    public int getDir(){
         return this.dir;
     }
     
@@ -82,7 +83,7 @@ public class elevatorA extends Thread{
         this.nextFloor = next;
     }
     
-    public void setDir(char direction){
+    public void setDir(int direction){
         this.dir = direction;
     }
     
@@ -111,57 +112,56 @@ public class elevatorA extends Thread{
     
     //random floor generator for testing purposes
     public void randFloor(){
-        // int dest = (int)(Math.random() * 4 +1); //generate numbers 1 to 4
-        // int curr = (int)(Math.random() * 4 +1);
-        // int call = (int)(Math.random() * 4 +1);
-        // setDest(dest);
-        // setCurr(curr);
-        // setCall(call);
+        int dest = (int)(Math.random() * 4 +1); //generate numbers 1 to 4
+        int curr = (int)(Math.random() * 4 +1);
+        int call = (int)(Math.random() * 4 +1);
+        setDest(dest);
+        setCurr(curr);
+        setCall(call);
 
-        //randomize 4 values into an array
         for(int i = 0; i <4; i++){
-            int dest = (int)(Math.random() * 4 +1); //generate numbers 1 to 4
-            int call = (int)(Math.random() * 4 +1);
+            dest = (int)(Math.random() * 4 +1); //generate numbers 1 to 4
+            call = (int)(Math.random() * 4 +1);
             callArr.add(call);
             destArr.add(dest);
         }
-
-        int curr = (int)(Math.random() * 4 +1);
-        currArr.add(curr);
-
-    }
-    
-    //adding a floor to the call array
-    public void addCall(){
-        
     }
     
     //function for elevator operation
     public void operate(){
-        randFloor(); //generate random floor *TESTING*
-        System.out.println("Elevator at: " + getCurr() + " Call coming from " + getCall() + " Destination: " + getDest());
-        
-        /*op: add destination to call array -> 
-        add call floor to array -> list reaches call floor -> push call floor out from array    */
+        setCurr(1); //elevators start at floor 1
+        int taskCount = 1;
 
-        if(getCall() > getDest()){  //elevator go downwards
-            moveDown();
-        }else if (getCall() < getDest()){   //elevator go upwards
-            moveUp();
-        }else{
-            System.out.println("Lift is at Destination Floor");
-        }
+        while(callArr.isEmpty() == false){
+            setCall(callArr.get(0));    //always get the first job on the array
+            setDest(destArr.get(0));
+
+            System.out.println("========Task: " + taskCount +"===========");   //testing to see how many times elevator completes an operation
+            System.out.println("Elevator at: " + getCurr() + " Call coming from " + getCall() + " Destination: " + getDest());
+            
+            /*op: add destination to call array -> 
+            add call floor to array -> list reaches call floor -> push call floor out from array    */
+
+            if(getCurr() != getCall())  //if lift is not at call floor
+                goCallFloor();
+
+            if(getCall() > getDest()){  //elevator go downwards
+                moveDown();
+            }else if (getCall() < getDest()){   //elevator go upwards
+                moveUp();
+            }else{
+                System.out.println("Lift is at Destination Floor");
+            }
         
-       
+            taskCount++;
+        }
     }
-    
-    //processes elevator UP operations (when destination is above call floor)
-    public void moveUp(){
-        setDir('u'); //set direction to up
+
+    //for elevator to go to Call Floor
+    public void goCallFloor(){
         int begin = getCurr();
 
-        //for elevator to go to the call floor
-        if(begin < getCall()){
+        if(begin < getCall()){  //if lift lower than call floor
             for(int i = begin; i <= getCall(); i++){
                 try {
                     setCurr(i);
@@ -171,7 +171,7 @@ public class elevatorA extends Thread{
                     e.printStackTrace();
                 }
             }
-        }else if(begin > getCall()){
+        }else if(begin > getCall()){    //if lift is higher than call floor
             for(int i = begin; i >= getCall(); i--){
                 try {
                     setCurr(i);
@@ -182,73 +182,59 @@ public class elevatorA extends Thread{
                 }
             }
         }
-
+    }
+    
+    //processes elevator UP operations (when destination is above call floor)
+    public void moveUp(){
+        setDir(1); //set direction to up
         System.out.println("Lift picks up passenger at floor "+ getCurr());
-        begin = getCurr(); //when lift has reached call floor
+        callArr.remove(0); 
 
         //lift proceeds to UPWARDS Destination
-        for(int i = begin +1; i <= getDest(); i++){
+        for(int i = getCurr()+1; i <= getDest(); i++){
             try {
                 setCurr(i);
-                System.out.println("Lift is at floor "+ i);
+                if(getCurr() != getDest())
+                 System.out.println("Lift is at floor "+ i);
+                else
+                 System.out.println("Passenger alights at floor "+ i);
                 Thread.sleep(1000);
             } catch(InterruptedException e){
                 e.printStackTrace();
             }
         }
 
+        destArr.remove(0);
         returnFloor();
        
     }
     
     public void moveDown(){
-        setDir('d'); //set direction to down
-        int begin = getCurr();
-
-        //for elevator to go to the call floor
-        if(begin < getCall()){
-            for(int i = begin; i >= getCall(); i++){
-                try {
-                    setCurr(i);
-                    System.out.println("Lift is at floor "+ i);
-                    Thread.sleep(1000);
-                } catch(InterruptedException e){
-                    e.printStackTrace();
-                }
-            }
-        }else if(begin > getCall()){
-            for(int i = begin; i <= getCall(); i--){
-                try {
-                    setCurr(i);
-                    System.out.println("Lift is at floor "+ i);
-                    Thread.sleep(1000);
-                } catch(InterruptedException e){
-                    e.printStackTrace();
-                }
-            }
-        }
-
+        setDir(0); //set direction to down
         System.out.println("Lift picks up passenger at floor "+ getCurr());
-        begin = getCurr(); //when lift has reached call floor
+        callArr.remove(0); //remove call from array
 
         //lift proceeds to DOWNWARDS Destination
-
-        for(int i = begin -1; i >= getDest(); i--){
+        for(int i = getCurr()-1; i >= getDest(); i--){
             try {
                 setCurr(i);
-                System.out.println("Lift is at floor "+ i);
+                if(getCurr() != getDest())
+                 System.out.println("Lift is at floor "+ i);
+               else
+                 System.out.println("Passenger alights at floor "+ i);
                 Thread.sleep(1000);
             } catch(InterruptedException e){
                 e.printStackTrace();
             }
         }
 
+        destArr.remove(0);
         returnFloor();
     }
     
     //return lift to floor 1
     public void returnFloor(){
-        if(this.isEmpty){ //if no more calls
+        if(callArr.isEmpty()){ //if no more calls
             System.out.println("No More calls, lift returning to ground floor");
 
             while(getCurr() != 1){
@@ -267,7 +253,7 @@ public class elevatorA extends Thread{
     }
     
     public void overrideFloor(int floor){
-        setNext(floor);
+        destArr.add(0,floor); //add override floor to the head of the array
     }
 
     //function to sort the destination and call numbers into array

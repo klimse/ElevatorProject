@@ -12,8 +12,10 @@ public class elevatorA extends Thread{
     //destination floor, current floor of lift, call from which floor, number of passengers, number of next floor lift is going to
     int destFloor, currFloor, callFloor,passengerCount, nextFloor, dir;
     boolean isOverweight, isMoving, isStuck, isSurgeon, isEmpty;
-    ArrayList<Integer> callArr = new ArrayList<Integer>(Arrays.asList(new Integer[]{4,2,3,1})) ;  //array to store call floors
-    ArrayList<Integer> destArr = new ArrayList<Integer>(Arrays.asList(new Integer[]{1,3,2,4})); //array to store destination floors
+    // ArrayList<Integer> callArr = new ArrayList<Integer>(Arrays.asList(new Integer[]{4,2,3,1})) ;  //array to store call floors
+    // ArrayList<Integer> destArr = new ArrayList<Integer>(Arrays.asList(new Integer[]{1,3,2,4})); //array to store destination floors
+    ArrayList<Integer> callArr = new ArrayList<Integer>();  
+    ArrayList<Integer> destArr = new ArrayList<Integer>();
   
     public elevatorA(){
         this.isEmpty = true;
@@ -21,9 +23,11 @@ public class elevatorA extends Thread{
         operate();
     }
     
-    public elevatorA(int destination, int callFloor){
-        setDest(destination);
-        setCall(callFloor);
+    public elevatorA(ArrayList<Integer> nCallArr, ArrayList<Integer> nDestArr){
+        setCallArr(nCallArr);
+        setDestArr(nDestArr);
+        this.isEmpty = true;
+        operate();
     }
     
     //--------------------------get Methods---------------------------------------
@@ -58,11 +62,27 @@ public class elevatorA extends Thread{
     }
     
     //returns the lift call array
-    public ArrayList getCallArr(){
+    public ArrayList<Integer> getCallArr(){
         return callArr;
+    }
+
+    //returns the lift destination array
+    public ArrayList<Integer> getDestArr(){
+        return destArr;
     }
     
     //**************************set Methods***************************************
+
+    //copies array to the call array
+    public void setCallArr(ArrayList<Integer> newArr){
+        callArr = newArr;
+    }
+
+    //copies array to the destination
+    public void setDestArr(ArrayList<Integer> newArr){
+        destArr = newArr;
+    }
+
     public void setDest(int dest){
         this.destFloor = dest;
     }
@@ -103,11 +123,6 @@ public class elevatorA extends Thread{
         isSurgeon = status;
     }
     
-    public void setCalls(int newCall){
-        
-    }
-    
-    
     //================FUNCTIONS==================================
     
     //random floor generator for testing purposes
@@ -132,16 +147,13 @@ public class elevatorA extends Thread{
         setCurr(1); //elevators start at floor 1
         int taskCount = 1;
 
-        while(callArr.isEmpty() == false){
+        while(callArr.isEmpty() == false){  //loop until no more elevator calls left
             setCall(callArr.get(0));    //always get the first job on the array
             setDest(destArr.get(0));
 
             System.out.println("========Task: " + taskCount +"===========");   //testing to see how many times elevator completes an operation
             System.out.println("Elevator at: " + getCurr() + " Call coming from " + getCall() + " Destination: " + getDest());
             
-            /*op: add destination to call array -> 
-            add call floor to array -> list reaches call floor -> push call floor out from array    */
-
             if(getCurr() != getCall())  //if lift is not at call floor
                 goCallFloor();
 

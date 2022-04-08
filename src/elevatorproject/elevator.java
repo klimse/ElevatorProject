@@ -2,31 +2,32 @@
 package elevatorproject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
-
-import javax.crypto.spec.DESKeySpec;
+//import java.util.Arrays;
+//import java.util.Random;
 
 
-public class elevatorA extends Thread{
+
+public class elevator extends Thread{
     //destination floor, current floor of lift, call from which floor, number of passengers, number of next floor lift is going to
     int destFloor, currFloor, callFloor,passengerCount, nextFloor, dir;
     boolean isOverweight, isMoving, isStuck, isSurgeon, isEmpty;
+    private char elevatorLabel;
     // ArrayList<Integer> callArr = new ArrayList<Integer>(Arrays.asList(new Integer[]{4,2,3,1})) ;  //array to store call floors
     // ArrayList<Integer> destArr = new ArrayList<Integer>(Arrays.asList(new Integer[]{1,3,2,4})); //array to store destination floors
     ArrayList<Integer> callArr = new ArrayList<Integer>();  
     ArrayList<Integer> destArr = new ArrayList<Integer>();
   
-    public elevatorA(){
+    public elevator(){
         this.isEmpty = true;
         //System.out.println("Elevator A is created");
         operate();
     }
     
-    public elevatorA(ArrayList<Integer> nCallArr, ArrayList<Integer> nDestArr){
+    public elevator(ArrayList<Integer> nCallArr, ArrayList<Integer> nDestArr, char eL){
         setCallArr(nCallArr);
         setDestArr(nDestArr);
         this.isEmpty = true;
+        elevatorLabel = eL;
         operate();
     }
     
@@ -152,6 +153,7 @@ public class elevatorA extends Thread{
             setDest(destArr.get(0));
 
             System.out.println("========Task: " + taskCount +"===========");   //testing to see how many times elevator completes an operation
+            System.out.println("Elevator: " + elevatorLabel);
             System.out.println("Elevator at: " + getCurr() + " Call coming from " + getCall() + " Destination: " + getDest());
             
             if(getCurr() != getCall())  //if lift is not at call floor

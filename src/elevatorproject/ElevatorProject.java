@@ -14,7 +14,7 @@ public class ElevatorProject {
         elevator eA = new elevator(cArr, dArr, 'A');
         elevator eB = new elevator(cArr, dArr, 'B');
         eA.start(); //starts elevator A
-        eB.start(); //starts elevetor B
+        eB.start(); //starts elevator B
     }
     
 }

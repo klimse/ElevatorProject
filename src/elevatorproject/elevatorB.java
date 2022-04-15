@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 
 
-public class elevatorB extends Thread{
+public class elevatorB extends elevatorController implements Runnable{
     //destination floor, current floor of lift, call from which floor, number of passengers, number of next floor lift is going to
     int destFloor, currFloor, callFloor,passengerCount, nextFloor, dir;
     boolean isOverweight, isMoving, isStuck, isSurgeon, isEmpty;
@@ -18,7 +18,7 @@ public class elevatorB extends Thread{
     public elevatorB(){
         this.isEmpty = true;
         //System.out.println("Elevator A is created");
-        operate();
+
     }
     
     public elevatorB(ArrayList<Integer> nCallArr, ArrayList<Integer> nDestArr, char eL){
@@ -26,7 +26,7 @@ public class elevatorB extends Thread{
         setDestArr(nDestArr);
         this.isEmpty = true;
         elevatorLabel = eL;
-        operate();
+  
     }
     
     //--------------------------get Methods---------------------------------------
@@ -142,7 +142,8 @@ public class elevatorB extends Thread{
     }
     
     //function for elevatorA operation
-    public void operate(){
+    @Override
+    public void run(){
         setCurr(1); //elevators start at floor 1
         int taskCount = 1;
 

@@ -4,6 +4,8 @@ package elevatorproject;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+//just boostrap
+
 public class ElevatorProject {
 
     public static void main(String[] args) {
@@ -16,9 +18,13 @@ public class ElevatorProject {
 
         elevatorA eA = new elevatorA(cArr, dArr, 'A');
         elevatorB eB = new elevatorB(cArrB, dArrB, 'B');
-        eA.start(); //starts elevator A 
-        eB.start(); //starts elevator B 
-        //System.out.println(eB.isAlive());
+        
+        Thread elevatorA = new Thread(eA);
+        Thread elevatorB = new Thread(eB);
+        
+        elevatorA.start();
+        elevatorB.start();
+
     }
     
 }

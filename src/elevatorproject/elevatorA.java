@@ -3,7 +3,7 @@ package elevatorproject;
 
 import java.util.ArrayList;
 
-//direction 0 = down, 1 = up, 2 = idle.
+//direction 0 = down, 1 = up
 
 public class elevatorA extends elevatorController implements Runnable{
     //destination floor, current floor of lift, call from which floor, number of passengers, number of next floor lift is going to
@@ -168,7 +168,7 @@ public class elevatorA extends elevatorController implements Runnable{
 
     //for elevatorA to go to Call Floor
     public void goCallFloor(){
-        int begin = getCurr();
+        int begin = getCurr();  //current floor
 
         if(begin < getCall()){  //if lift lower than call floor
             for(int i = begin; i <= getCall(); i++){

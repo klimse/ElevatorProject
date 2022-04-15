@@ -5,25 +5,23 @@ import java.util.ArrayList;
 //import java.util.Arrays;
 //import java.util.Random;
 
+//direction 0 = down, 1 = up, 2 = idle.
 
-
-public class elevator extends Thread{
+public class elevatorA extends Thread{
     //destination floor, current floor of lift, call from which floor, number of passengers, number of next floor lift is going to
-    int destFloor, currFloor, callFloor,passengerCount, nextFloor, dir;
+    int destFloor, currFloor, callFloor,passengerCount, nextFloor, dir; 
     boolean isOverweight, isMoving, isStuck, isSurgeon, isEmpty;
     private char elevatorLabel;
-    // ArrayList<Integer> callArr = new ArrayList<Integer>(Arrays.asList(new Integer[]{4,2,3,1})) ;  //array to store call floors
-    // ArrayList<Integer> destArr = new ArrayList<Integer>(Arrays.asList(new Integer[]{1,3,2,4})); //array to store destination floors
     ArrayList<Integer> callArr = new ArrayList<Integer>();  
     ArrayList<Integer> destArr = new ArrayList<Integer>();
   
-    public elevator(){
+    public elevatorA(){
         this.isEmpty = true;
         //System.out.println("Elevator A is created");
         operate();
     }
     
-    public elevator(ArrayList<Integer> nCallArr, ArrayList<Integer> nDestArr, char eL){
+    public elevatorA(ArrayList<Integer> nCallArr, ArrayList<Integer> nDestArr, char eL){
         setCallArr(nCallArr);
         setDestArr(nDestArr);
         this.isEmpty = true;
@@ -143,17 +141,17 @@ public class elevator extends Thread{
         }
     }
     
-    //function for elevator operation
+    //function for elevatorA operation
     public void operate(){
         setCurr(1); //elevators start at floor 1
         int taskCount = 1;
 
-        while(callArr.isEmpty() == false){  //loop until no more elevator calls left
+        while(callArr.isEmpty() == false){  //loop until no more elevatorA calls left
             setCall(callArr.get(0));    //always get the first job on the array
             setDest(destArr.get(0));
 
-            System.out.println("========Task: " + taskCount +"===========");   //testing to see how many times elevator completes an operation
-            System.out.println("Elevator: " + elevatorLabel);
+            System.out.println("========Task: " + taskCount +"===========");   //testing to see how many times elevatorA completes an operation
+            System.out.println("Elevator: " + this.elevatorLabel);
             System.out.println("Elevator at: " + getCurr() + " Call coming from " + getCall() + " Destination: " + getDest());
             
             if(getCurr() != getCall())  //if lift is not at call floor
@@ -171,7 +169,7 @@ public class elevator extends Thread{
         }
     }
 
-    //for elevator to go to Call Floor
+    //for elevatorA to go to Call Floor
     public void goCallFloor(){
         int begin = getCurr();
 
@@ -198,7 +196,7 @@ public class elevator extends Thread{
         }
     }
     
-    //processes elevator UP operations (when destination is above call floor)
+    //processes elevatorA UP operations (when destination is above call floor)
     public void moveUp(){
         setDir(1); //set direction to up
         System.out.println("Lift picks up passenger at floor "+ getCurr());

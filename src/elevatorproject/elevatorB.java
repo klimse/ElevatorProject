@@ -2,31 +2,30 @@
 package elevatorproject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
+//import java.util.Arrays;
+//import java.util.Random;
 
-import javax.crypto.spec.DESKeySpec;
 
 
 public class elevatorB extends Thread{
     //destination floor, current floor of lift, call from which floor, number of passengers, number of next floor lift is going to
     int destFloor, currFloor, callFloor,passengerCount, nextFloor, dir;
     boolean isOverweight, isMoving, isStuck, isSurgeon, isEmpty;
-    // ArrayList<Integer> callArr = new ArrayList<Integer>(Arrays.asList(new Integer[]{4,2,3,1})) ;  //array to store call floors
-    // ArrayList<Integer> destArr = new ArrayList<Integer>(Arrays.asList(new Integer[]{1,3,2,4})); //array to store destination floors
-    ArrayList<Integer> callArr = new ArrayList<Integer>();
+    private char elevatorLabel;
+    ArrayList<Integer> callArr = new ArrayList<Integer>();  
     ArrayList<Integer> destArr = new ArrayList<Integer>();
   
     public elevatorB(){
         this.isEmpty = true;
-        //System.out.println("Elevator B is created");
+        //System.out.println("Elevator A is created");
         operate();
     }
     
-    public elevatorB(ArrayList<Integer> nCallArr, ArrayList<Integer> nDestArr){
+    public elevatorB(ArrayList<Integer> nCallArr, ArrayList<Integer> nDestArr, char eL){
         setCallArr(nCallArr);
         setDestArr(nDestArr);
         this.isEmpty = true;
+        elevatorLabel = eL;
         operate();
     }
     
@@ -60,7 +59,7 @@ public class elevatorB extends Thread{
     public int getDir(){
         return this.dir;
     }
-
+    
     //returns the lift call array
     public ArrayList<Integer> getCallArr(){
         return callArr;
@@ -78,11 +77,11 @@ public class elevatorB extends Thread{
         callArr = newArr;
     }
 
-    //copies array to the destination array
+    //copies array to the destination
     public void setDestArr(ArrayList<Integer> newArr){
         destArr = newArr;
     }
-    
+
     public void setDest(int dest){
         this.destFloor = dest;
     }
@@ -123,7 +122,6 @@ public class elevatorB extends Thread{
         isSurgeon = status;
     }
     
-    
     //================FUNCTIONS==================================
     
     //random floor generator for testing purposes
@@ -143,18 +141,19 @@ public class elevatorB extends Thread{
         }
     }
     
-    //function for elevator operation
+    //function for elevatorA operation
     public void operate(){
         setCurr(1); //elevators start at floor 1
         int taskCount = 1;
 
-        while(callArr.isEmpty() == false){
+        while(callArr.isEmpty() == false){  //loop until no more elevatorA calls left
             setCall(callArr.get(0));    //always get the first job on the array
             setDest(destArr.get(0));
 
-            System.out.println("========Task: " + taskCount +"===========");   //testing to see how many times elevator completes an operation
+            System.out.println("========Task: " + taskCount +"===========");   //testing to see how many times elevatorA completes an operation
+            System.out.println("Elevator: " + this.elevatorLabel);
             System.out.println("Elevator at: " + getCurr() + " Call coming from " + getCall() + " Destination: " + getDest());
-
+            
             if(getCurr() != getCall())  //if lift is not at call floor
                 goCallFloor();
 
@@ -170,7 +169,7 @@ public class elevatorB extends Thread{
         }
     }
 
-    //for elevator to go to Call Floor
+    //for elevatorA to go to Call Floor
     public void goCallFloor(){
         int begin = getCurr();
 
@@ -197,7 +196,7 @@ public class elevatorB extends Thread{
         }
     }
     
-    //processes elevator UP operations (when destination is above call floor)
+    //processes elevatorA UP operations (when destination is above call floor)
     public void moveUp(){
         setDir(1); //set direction to up
         System.out.println("Lift picks up passenger at floor "+ getCurr());

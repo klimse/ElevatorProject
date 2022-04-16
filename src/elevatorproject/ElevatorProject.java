@@ -24,26 +24,28 @@ public class ElevatorProject {
         // elevatorB eB = new elevatorB(cArrB, dArrB, 'B');
         
         
-        Passengers[] psgs = new Passengers[MAXPASSENGERS]; //array of *3* passengers 
+        //Passengers[] psgs = new Passengers[MAXPASSENGERS]; //array of *3* passengers 
 
         //create *3* passengers
-        for(int i = 0 ; i < MAXPASSENGERS; i++){
-         psgs[i] = new Passengers();
-         psgs[i].setID(i+1);
-         psgs[i].run();
-        //  System.out.println(psgs[i].ID);
-        //  System.out.println(psgs[i].getCallFloor());
-        //  System.out.println(psgs[i].getDestFloor());
-        //  System.out.println(psgs[i].dest_dir);
-        }
+        // for(int i = 0 ; i < MAXPASSENGERS; i++){
+        //  psgs[i] = new Passengers();
+        //  psgs[i].setID(i+1);
+        //  psgs[i].run();
+        // //  System.out.println(psgs[i].ID);
+        // //  System.out.println(psgs[i].getCallFloor());
+        // //  System.out.println(psgs[i].getDestFloor());
+        // //  System.out.println(psgs[i].dest_dir);
+        // }
 
         elevatorController eC = new elevatorController();
 
-        eC.run();
+        elevatorA eA = new elevatorA('A');
+        elevatorA eB = new elevatorA('B');
+        Thread elevA = new Thread(eA);
+        Thread elevB = new Thread(eB);
         
-
-
-
+        elevA.start();
+        elevB.start();
 
     }
     

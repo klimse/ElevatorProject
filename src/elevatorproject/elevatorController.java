@@ -37,23 +37,23 @@ public class elevatorController {
         //sort calls to new arrays
        // sortCalls();
 
-        elevatorA eA = new elevatorA();
-        elevatorA eB = new elevatorA();
+        elevatorA eA = new elevatorA('A');
+        elevatorB eB = new elevatorB('B');
         Thread elevA = new Thread(eA);
         Thread elevB = new Thread(eB);
         
         elevA.start();
         elevB.start();
 
-        // do{
-        //     //if statement to check for closest floors curr
+        do{
+            //if statement to check for closest floors curr
             
-        //     //assign the current floor, let the individual elevator calculate if they are closest the floor, return to the class
-        //     //loop assign curr floor and dest floor
+            //assign the current floor, let the individual elevator calculate if they are closest the floor, return to the class
+            //loop assign curr floor and dest floor
 
-        // }while(!destArr.isEmpty());
+        }while(!destArr.isEmpty());
 
-        //return elevator to floor 1
+       // return elevator to floor 1
     }
 
 }

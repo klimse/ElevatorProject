@@ -15,8 +15,9 @@ public class elevatorA extends elevatorController implements Runnable{
     ArrayList<Integer> callArr = super.callArr;  
     ArrayList<Integer> destArr = super.destArr;
 
-    public elevatorA(){
+    public elevatorA(char eL){
         this.isEmpty = true;
+        elevatorLabel = eL;
         //System.out.println("Elevator A is created");
     }
     
@@ -25,10 +26,6 @@ public class elevatorA extends elevatorController implements Runnable{
         setDestArr(nDestArr);
         this.isEmpty = true;
         elevatorLabel = eL;
-    }
-
-    public void setID(char id){
-        this.elevatorLabel = id;
     }
     
     //--------------------------get Methods---------------------------------------
@@ -137,9 +134,9 @@ public class elevatorA extends elevatorController implements Runnable{
         setCurr(1); //elevators start at floor 1
         int taskCount = 1;
 
-        while(callArr.isEmpty() == false){  //loop until no more elevatorA calls left
-            setCall(callArr.get(0));    //always get the first job on the array
-            setDest(destArr.get(0));
+        while(super.callArr.isEmpty() == false){  //loop until no more elevatorA calls left
+            setCall(super.callArr.get(0));    //always get the first job on the array
+            setDest(super.destArr.get(0));
 
             System.out.println("========Task: " + taskCount +"===========");   //testing to see how many times elevatorA completes an operation
             System.out.println("Elevator: " + this.elevatorLabel);
@@ -161,7 +158,7 @@ public class elevatorA extends elevatorController implements Runnable{
     }
 
     //for elevatorA to go to Call Floor
-    public void goCallFloor(){
+    public synchronized void goCallFloor(){
         int begin = getCurr();  //current floor
 
         if(begin < getCall()){  //if lift lower than call floor
@@ -191,7 +188,7 @@ public class elevatorA extends elevatorController implements Runnable{
     public void moveUp(){
         setDir(1); //set direction to up
         System.out.println("Lift picks up passenger at floor "+ getCurr());
-        callArr.remove(0); 
+        super.callArr.remove(0); 
 
         //lift proceeds to UPWARDS Destination
         for(int i = getCurr()+1; i <= getDest(); i++){
@@ -207,7 +204,7 @@ public class elevatorA extends elevatorController implements Runnable{
             }
         }
 
-        destArr.remove(0);
+        super.destArr.remove(0);
         returnFloor();
        
     }
@@ -215,7 +212,7 @@ public class elevatorA extends elevatorController implements Runnable{
     public void moveDown(){
         setDir(0); //set direction to down
         System.out.println("Lift picks up passenger at floor "+ getCurr());
-        callArr.remove(0); //remove call from array
+        super.callArr.remove(0); //remove call from array
 
         //lift proceeds to DOWNWARDS Destination
         for(int i = getCurr()-1; i >= getDest(); i--){
@@ -231,13 +228,13 @@ public class elevatorA extends elevatorController implements Runnable{
             }
         }
 
-        destArr.remove(0);
+        super.destArr.remove(0);
         returnFloor();
     }
     
     //return lift to floor 1
     public void returnFloor(){
-        if(callArr.isEmpty()){ //if no more calls
+        if(super.callArr.isEmpty()){ //if no more calls
             System.out.println("No More calls, lift returning to ground floor");
 
             while(getCurr() != 1){
@@ -259,10 +256,7 @@ public class elevatorA extends elevatorController implements Runnable{
         destArr.add(0,floor); //add override floor to the head of the array
     }
 
-    //function to sort the destination and call numbers into array
-    public void sortArray(){
 
-    }
     
     
     

@@ -8,11 +8,13 @@ import java.util.ArrayList;
 public class elevatorA extends elevatorController implements Runnable{
     //destination floor, current floor of lift, call from which floor, number of passengers, number of next floor lift is going to
     int destFloor, currFloor, callFloor,passengerCount, nextFloor, dir; 
-    boolean isOverweight, isMoving, isStuck, isSurgeon, isEmpty;
-    private char elevatorLabel;
-    ArrayList<Integer> callArr = new ArrayList<Integer>();  
-    ArrayList<Integer> destArr = new ArrayList<Integer>();
-  
+    boolean isOverweight, isEmpty;
+    char elevatorLabel;
+    // ArrayList<Integer> callArr = new ArrayList<Integer>();  
+    // ArrayList<Integer> destArr = new ArrayList<Integer>();
+    ArrayList<Integer> callArr = super.callArr;  
+    ArrayList<Integer> destArr = super.destArr;
+
     public elevatorA(){
         this.isEmpty = true;
         //System.out.println("Elevator A is created");
@@ -23,6 +25,10 @@ public class elevatorA extends elevatorController implements Runnable{
         setDestArr(nDestArr);
         this.isEmpty = true;
         elevatorLabel = eL;
+    }
+
+    public void setID(char id){
+        this.elevatorLabel = id;
     }
     
     //--------------------------get Methods---------------------------------------
@@ -104,18 +110,6 @@ public class elevatorA extends elevatorController implements Runnable{
     
     public void setOverw(boolean status){
         isOverweight = status;
-    }
-    
-    public void setMoving(boolean status){
-        isMoving = status;
-    }
-    
-    public void setStuck(boolean status){
-        isStuck = status;
-    }
-    
-    public void setSurgeon(boolean status){
-        isSurgeon = status;
     }
     
     //================FUNCTIONS==================================

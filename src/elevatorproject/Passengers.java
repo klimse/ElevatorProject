@@ -4,30 +4,28 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-public class Passengers extends Thread
+public class Passengers 
 {
-    private int weight_passenger, weight_equip, total_weight, num_passengers, call_floor, dest_floor;
-    private int dest_dir; //0 go down // 1 go up
-    private boolean hospbed, hospequip;
-    private int ID;
+    int weight_passenger, weight_equip, total_weight, num_passengers, call_floor, dest_floor;
+    int call, dest;
+    int dest_dir; //0 go down // 1 go up
+    boolean hospbed, hospequip;
+    int ID;
     
-    //from class elevatorA
-    private int destFloor, currFloor, callFloor,passengerCount, nextFloor, dir;
-    private boolean isOverweight = false, isMoving, isStuck, isSurgeon, isEmpty;
+    boolean isOverweight = false, isMoving, isStuck, isSurgeon, isEmpty;
  
     
     //declare an arraylist for floor numbers
-    private ArrayList<Integer> floors = new ArrayList<>(Arrays.asList(4,2,3,1));
-    private ArrayList<Integer> destArr = new ArrayList<>(); //araylist for destination floors
-    private ArrayList<Integer> callArr = new ArrayList<>(); //arraylist for call floors
-    private ArrayList<Integer> dest_dirArr = new ArrayList<>(); //arraylist for destination direction for each passenger
+    ArrayList<Integer> floors = new ArrayList<>(Arrays.asList(new Integer[]{4,2,3,1}));
+    ArrayList<Integer> destArr = new ArrayList<>(); //araylist for destination floors
+    ArrayList<Integer> callArr = new ArrayList<>(); //arraylist for call floors
+    ArrayList<Integer> dest_dirArr = new ArrayList<>(); //arraylist for destination direction for each passenger
 
-    private int index = (int)(Math.random()*floors.size());
+    int index = (int)(Math.random()*floors.size());
     
     //int[] floors = {1,2,3,4};
     //String[] directions = {"U", "D"};
-     private int directions[] = {0,1};
-
+    int directions[] = {0,1};
     
     //constructor
     public Passengers()
@@ -79,20 +77,27 @@ public class Passengers extends Thread
         return isOverweight;
     }
 
+    public int getCallFloor(){
+        return floors.get(call_floor);
+    }
 
-    //OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD OLD//
-    
+    public int getDestFloor(){
+        return floors.get(dest_floor);
+    }
+
     public void run()
     {
         Random ran = new Random(); //creates a random class
         
-        //random boolean - is there a hospital bed?     
-        hospbed = ran.nextBoolean();
-        if (hospbed == true)
-        {
-            System.out.println("\nThere is a hospital bed.\nAdded 600kg.");
-            total_weight += 600;
-            System.out.println("TOTAL WEIGHT = " + total_weight + " kg");
+        //random boolean - is there a hospital bed?   
+        if(hospbed == false){  
+            hospbed = ran.nextBoolean();
+            if (hospbed == true)
+            {
+                System.out.println("\nThere is a hospital bed.\nAdded 600kg.");
+                total_weight += 600;
+                System.out.println("TOTAL WEIGHT = " + total_weight + " kg");
+            }
         }
         
         //random boolean - is there hospital equipment?
@@ -109,16 +114,16 @@ public class Passengers extends Thread
         }
         
         //passengers' weight, current floor, direction, desired floor
-        for(int i=1; i<=5; i++)
-        {
-            setID(i);   /*set passenger ID*/
+       // for(int i=1; i<=5; i++)
+       // {
 
             //randomly generate passenger's weight
             //between 50 - 140 kg
             //max-min = 140-50 = 90
             weight_passenger = 40 + (int)(Math.random()*90);
 
-            System.out.println("\nPassenger #" + i + " = " + weight_passenger + " kg");
+            System.out.println("==============================================================");
+            System.out.println("\nPassenger #" + this.ID + " = " + weight_passenger + " kg");
             
             total_weight += weight_passenger;
             
@@ -127,9 +132,9 @@ public class Passengers extends Thread
             System.out.println("Current num of passengers = " + num_passengers);
             System.out.println("TOTAL WEIGHT = " + total_weight + " kg");
             
-            //randomly select current floor from array
-            call_floor = new Random().nextInt(floors.size()-1);
-            System.out.println("Current floor       : " + floors.get(call_floor)); 
+            //randomly select call floor from array
+            call_floor = new Random().nextInt(3) + 1; //random 4 floors
+            System.out.println("Call floor       : " + call_floor); 
             
             //randomly select direction (up or down)   
             //if curr_floor == 4, not possible to go up
@@ -152,14 +157,14 @@ public class Passengers extends Thread
             System.out.println("Direction           : " + dest_dir);
 
             //based on direction chosen, randomly select a destination floor which satisfies direction            
-            
+            //fix how the floors are generated
             if (dest_dir == 1) //UP direction chosen
             {
                 System.out.println("they wanna go up"); //just a marker, remove later
                 //validation check : dest_floor cant be equal or less than current floor
                 do
                 {
-                    dest_floor = new Random().nextInt(floors.size()-1);
+                    dest_floor = new Random().nextInt(3) + 1 ;
                 }
                 while (dest_floor <= call_floor);
             }
@@ -169,26 +174,20 @@ public class Passengers extends Thread
                 //validation check : dest_floor cant be equal or more than current floor
                 do
                 {
-                    dest_floor = new Random().nextInt(floors.size()-1);
+                    dest_floor = new Random().nextInt(floors.size());
                 }
                 while (dest_floor >= call_floor);
             }        
             System.out.println("Destination floor   : " + floors.get(dest_floor));
-            
-        }       
+        //}       
         
-        //Meessage when lift is over weight
+        //Message when lift is over weight
         if(total_weight >= 1000)
         {
             isOverweight = true;
             System.out.println("\n!!LIFT FULL!! Weight has exceeded 1000KG!");
         }else
             isOverweight = false;
-
-        callArr.add(call_floor);    //add call floor to call array
-        destArr.add(destFloor);     //add destination floor to dest array
-        dest_dirArr.add(dest_dir);  //add direction to the dest_dir array
-            
     }  
     
 }

@@ -14,11 +14,13 @@ public class elevatorB extends elevatorController implements Runnable{
     boolean hasTask = false; //false = not fetching passenger, true = fetching passenger
 
      public elevatorB(char eL){
+         super();
         this.isEmpty = true;
         elevatorLabel = eL;
     }
     
     public elevatorB(ArrayList<Integer> nCallArr, ArrayList<Integer> nDestArr, char eL){
+        super();
         setCallArr(nCallArr);
         setDestArr(nDestArr);
         this.isEmpty = true;
@@ -175,7 +177,11 @@ public class elevatorB extends elevatorController implements Runnable{
     //processes elevatorA UP operations (when destination is above call floor)
     public synchronized void moveUp(){
         setDir(1); //set direction to up
+<<<<<<< HEAD
         System.out.println("Lift B picks up passenger at floor "+ getCurr());
+=======
+        System.out.println("Lift picks up passenger at floor "+ getCurr());
+>>>>>>> d0e6f698890ade761dbd9548c55624762661ae7e
         super.callArr.remove(0); 
 
         //lift proceeds to UPWARDS Destination
@@ -199,7 +205,11 @@ public class elevatorB extends elevatorController implements Runnable{
     
     public synchronized void moveDown(){
         setDir(0); //set direction to down
+<<<<<<< HEAD
         System.out.println("Lift B picks up passenger at floor "+ getCurr());
+=======
+        System.out.println("Lift picks up passenger at floor "+ getCurr());
+>>>>>>> d0e6f698890ade761dbd9548c55624762661ae7e
         super.callArr.remove(0); //remove call from array
 
         //lift proceeds to DOWNWARDS Destination
@@ -242,5 +252,14 @@ public class elevatorB extends elevatorController implements Runnable{
     
     public void overrideFloor(int floor){
         destArr.add(0,floor); //add override floor to the head of the array
+<<<<<<< HEAD
     }   
+=======
+    }
+
+
+    
+    
+    
+>>>>>>> d0e6f698890ade761dbd9548c55624762661ae7e
 }

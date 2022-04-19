@@ -15,11 +15,13 @@ public class elevatorA extends elevatorController implements Runnable
     boolean hasTask = false; //false = not fetching passenger, true = fetching passenger
 
     public elevatorA(char eL){
+        super();
         this.isEmpty = true;
         elevatorLabel = eL;
     }
     
     public elevatorA(ArrayList<Integer> nCallArr, ArrayList<Integer> nDestArr, char eL){
+        super();
         setCallArr(nCallArr);
         setDestArr(nDestArr);
         this.isEmpty = true;

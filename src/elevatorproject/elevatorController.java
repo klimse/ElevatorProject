@@ -9,51 +9,85 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class elevatorController {
-    ArrayList<Integer> callArr = new ArrayList<Integer>(Arrays.asList(new Integer[]{4,2,3})) ;  //test array to store call floors for elevator A
-    ArrayList<Integer> destArr = new ArrayList<Integer>(Arrays.asList(new Integer[]{1,3,2}));   //test array to store destination floors for elevator A
-    
-    ArrayList<Integer> callArrB = new ArrayList<Integer>(Arrays.asList(new Integer[]{4,2,1})) ; //test array to store call floors for elevator B
-    ArrayList<Integer> destArrB = new ArrayList<Integer>(Arrays.asList(new Integer[]{2,4,3})) ; //test array to store call floors for elevator B
 
-    //method to calculate traversable floors
-    private void calcTravFloors(){
-        //int curr = e.getCurr();
+    boolean turnOne = true;
+    
+    public elevatorController(ArrayList<Integer> ncallArr, ArrayList<Integer> ndestArr){
+        this.callArr = ncallArr;
+        this.destArr = ndestArr;
     }
 
-    //method to sort the calls
-    private void sortCalls(){
-        calcTravFloors();
-    }
-        //calculate traversable, consider overweight limit  
-            //pass the calls to the elevator
-
-    
-
-    //check if the elevators are empty
-
-    //method to pass the calls to the elevator after CREATING ELEVATOR THREADS
     public void run(){
-
-        //sort calls to new arrays
-       // sortCalls();
-
-        elevatorA eA = new elevatorA();
-        elevatorA eB = new elevatorA();
+        elevatorA eA = new elevatorA('A');
+        elevatorB eB = new elevatorB('B');
         Thread elevA = new Thread(eA);
         Thread elevB = new Thread(eB);
         
         elevA.start();
         elevB.start();
+    }
 
-        // do{
-        //     //if statement to check for closest floors curr
-            
-        //     //assign the current floor, let the individual elevator calculate if they are closest the floor, return to the class
-        //     //loop assign curr floor and dest floor
+    public synchronized void One() throws InterruptedException{
+        while(!turnOne){
+            System.out.println("Thread elevA is waiting");
+            wait();
+        }
+        //turn give to elevA
+        elevA.operate();
+        Thread.sleep(1500);
+        turnOne = false;
+        notify();
+    }
 
-        // }while(!destArr.isEmpty());
 
-        //return elevator to floor 1
+    public synchronized void Two() throws InterruptedException{
+        while(turnOne){
+            System.out.println("ElevB is waiting");
+            wait();
+        }
+        //gives turn to elevB
+        elevB.operate();
+        Thread.sleep(1500);
+        turnOne = true;
+        notify();
     }
 
 }
+
+// public class MutEx{
+//     boolean turnOne = true;
+//     elevatorA elevA;
+//     elevatorB elevB;
+
+//     public MutEx(elevatorA ea, elevatorB eb){
+//         elevA = ea;
+//         elevB = eb;
+//     }
+
+//     public synchronized void One() throws InterruptedException{
+//         while(!turnOne){
+//             System.out.println("Thread elevA is waiting");
+//             wait();
+//         }
+//         //turn give to elevA
+//         elevA.operate();
+//         Thread.sleep(1500);
+//         turnOne = false;
+//         notify();
+//     }
+
+
+//     public synchronized void Two() throws InterruptedException{
+//         while(turnOne){
+//             System.out.println("ElevB is waiting");
+//             wait();
+//         }
+//         //gives turn to elevB
+//         elevB.operate();
+//         Thread.sleep(1500);
+//         turnOne = true;
+//         notify();
+//     }
+
+    
+// }

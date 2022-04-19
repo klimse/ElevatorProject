@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 //direction 0 = down, 1 = up
 
-public class elevatorA extends elevatorController implements Runnable
+public class elevatorA extends ElevatorProject implements Runnable
 {
     //destination floor, current floor of lift, call from which floor, number of passengers, number of next floor lift is going to
     int destFloor, currFloor, callFloor,passengerCount, nextFloor, dir; 
@@ -12,16 +12,13 @@ public class elevatorA extends elevatorController implements Runnable
     char elevatorLabel;
     ArrayList<Integer> callArr = super.callArr;  
     ArrayList<Integer> destArr = super.destArr;
-    boolean hasTask = false; //false = not fetching passenger, true = fetching passenger
 
     public elevatorA(char eL){
-        super();
         this.isEmpty = true;
         elevatorLabel = eL;
     }
     
     public elevatorA(ArrayList<Integer> nCallArr, ArrayList<Integer> nDestArr, char eL){
-        super();
         setCallArr(nCallArr);
         setDestArr(nDestArr);
         this.isEmpty = true;
@@ -113,11 +110,7 @@ public class elevatorA extends elevatorController implements Runnable
     
     @Override
     public synchronized void run(){
-        try{
-            super.One();
-        }catch(InterruptedException e){
-            e.printStackTrace();
-        }
+        operate();
     }
 
     //function for elevatorA operation
@@ -125,27 +118,34 @@ public class elevatorA extends elevatorController implements Runnable
         setCurr(1); //elevators start at floor 1
         int taskCount = 1;
 
-        while(super.callArr.isEmpty() == false){  //loop until no more elevatorA calls left
-            setCall(super.callArr.get(0));    //always get the first job on the array
-            setDest(super.destArr.get(0));
+        //while(super.callArr.isEmpty() == false){  //loop until no more elevatorA calls left
+            if(super.bMoving == false){
+                super.aMoving = true;
+                setCall(super.callArr.get(0));    //always get the first job on the array
+                setDest(super.destArr.get(0));
 
-            System.out.println("========Task: " + taskCount +"===========");   //testing to see how many times elevatorA completes an operation
-            System.out.println("Elevator: " + this.elevatorLabel);
-            System.out.println("Elevator A at: " + getCurr() + " Call coming from " + getCall() + " Destination: " + getDest());
+                System.out.println("========Task: " + taskCount +"===========");   //testing to see how many times elevatorA completes an operation
+                System.out.println("Elevator: " + this.elevatorLabel);
+                System.out.println("Elevator A at: " + getCurr() + " Call coming from " + getCall() + " Destination: " + getDest());
+                
+                if(getCurr() != getCall())  //if lift is not at call floor
+                    this.goCallFloor();
+
+                if(getCall() > getDest()){  //elevator go downwards
+                    this.moveDown();
+                }else if (getCall() < getDest()){   //elevator go upwards
+                    this.moveUp();
+                }else{
+                    System.out.println("Lift A is at Destination Floor");
+                }
             
-            if(getCurr() != getCall())  //if lift is not at call floor
-                this.goCallFloor();
-
-            if(getCall() > getDest()){  //elevator go downwards
-                this.moveDown();
-            }else if (getCall() < getDest()){   //elevator go upwards
-                this.moveUp();
-            }else{
-                System.out.println("Lift A is at Destination Floor");
+                taskCount++;
+            }else if(super.callArr.isEmpty()){
+                return;
             }
+            super.aMoving = false;
+        //}
         
-            taskCount++;
-        }
     }
 
     //for elevatorA to go to Call Floor

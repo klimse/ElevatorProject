@@ -2,20 +2,18 @@
 package elevatorproject; 
 
 import java.util.ArrayList;
-import java.util.Arrays;
-
-
 
 public class ElevatorProject {
     static int MAXPASSENGERS = 3;
 
     //track passenger total weight and total num of passengers
     int total_weight, num_passengers;
-
-    public static void main(String[] args) {
-        ArrayList<Integer> callArr = new ArrayList<Integer>(Arrays.asList(new Integer[]{4,2,3})) ;  //test array to store call floors for elevator A
-        ArrayList<Integer> destArr = new ArrayList<Integer>(Arrays.asList(new Integer[]{1,3,2}));   //test array to store destination floors for elevator A
+    static ArrayList<Integer> callArr;  //test array to store call floors for elevator A
+    static ArrayList<Integer> destArr;   //test array to store destination floors for elevator A
+    boolean aMoving = true, bMoving = false;
  
+    public static void main(String[] args) {
+
         //Passengers[] psgs = new Passengers[MAXPASSENGERS]; //array of *3* passengers 
 
         //create *3* passengers
@@ -28,12 +26,24 @@ public class ElevatorProject {
         // //  System.out.println(psgs[i].getDestFloor());
         // //  System.out.println(psgs[i].dest_dir);
         // }
+        setArr();   //setting call and dest arrays
+        
+        elevatorA eA = new elevatorA('A');
+        elevatorB eB = new elevatorB('B');
+        Thread elevA = new Thread(eA);
+        Thread elevB = new Thread(eB);
+        
+        elevA.start();
+        elevB.start();
 
-        elevatorController eC = new elevatorController(callArr, destArr);
-        eC.run();
 
-
-
+    }
+    
+    //to set values for dest and call arrays
+    public static void setArr(){
+        testingclass test = new testingclass();
+        callArr = test.getCallArr();
+        destArr = test.getDestArr();
     }
     
 }

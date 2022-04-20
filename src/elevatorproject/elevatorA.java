@@ -116,15 +116,20 @@ public class elevatorA extends ElevatorProject implements Runnable
     //function for elevatorA operation
     public synchronized void operate(){
         setCurr(1); //elevators start at floor 1
-        int taskCount = 1;
+        //int taskCount = 1;
 
+        if(super.callArr.isEmpty()){
+            return;
+        }
+        if(super.flag == false){
+            wait();
+        }else{
         //while(super.callArr.isEmpty() == false){  //loop until no more elevatorA calls left
-            if(super.bMoving == false){
-                super.aMoving = true;
+            while(super.flag == true){
                 setCall(super.callArr.get(0));    //always get the first job on the array
                 setDest(super.destArr.get(0));
 
-                System.out.println("========Task: " + taskCount +"===========");   //testing to see how many times elevatorA completes an operation
+                System.out.println("========Task: " + super.taskCount +"===========");   //testing to see how many times elevatorA completes an operation
                 System.out.println("Elevator: " + this.elevatorLabel);
                 System.out.println("Elevator A at: " + getCurr() + " Call coming from " + getCall() + " Destination: " + getDest());
                 
@@ -139,11 +144,12 @@ public class elevatorA extends ElevatorProject implements Runnable
                     System.out.println("Lift A is at Destination Floor");
                 }
             
-                taskCount++;
-            }else if(super.callArr.isEmpty()){
-                return;
+                super.taskCount++;
+                super.flag = false;
+                notify();
             }
-            super.aMoving = false;
+        }
+            
         //}
         
     }

@@ -116,34 +116,40 @@ public class elevatorB extends ElevatorProject implements Runnable{
     //function for elevatorB operation
      public synchronized void operate(){
         setCurr(1); //elevators start at floor 1
-        int taskCount = 1;
+       // int taskCount = 1;
 
+        if(super.callArr.isEmpty()){
+            return;
+        }
        // while(super.callArr.isEmpty() == false){  //loop until no more elevatorA calls left
-            if(super.aMoving == false){
-                super.bMoving = true;
-                setCall(super.callArr.get(0));    //always get the first job on the array
-                setDest(super.destArr.get(0));
+        if(super.flag==true){
+            wait();
+        } else{ 
+            while(super.flag == false){
+                    setCall(super.callArr.get(0));    //always get the first job on the array
+                    setDest(super.destArr.get(0));
 
-                System.out.println("========Task: " + taskCount +"===========");   //testing to see how many times elevatorA completes an operation
-                System.out.println("Elevator: " + this.elevatorLabel);
-                System.out.println("Elevator B at: " + getCurr() + " Call coming from " + getCall() + " Destination: " + getDest());
+                    System.out.println("========Task: " + super.taskCount +"===========");   //testing to see how many times elevatorA completes an operation
+                    System.out.println("Elevator: " + this.elevatorLabel);
+                    System.out.println("Elevator B at: " + getCurr() + " Call coming from " + getCall() + " Destination: " + getDest());
+                    
+                    if(getCurr() != getCall())  //if lift is not at call floor
+                        this.goCallFloor();
+
+                    if(getCall() > getDest()){  //elevator go downwards
+                        this.moveDown();
+                    }else if (getCall() < getDest()){   //elevator go upwards
+                        this.moveUp();
+                    }else{
+                        System.out.println("Lift B is at Destination Floor");
+                    }
                 
-                if(getCurr() != getCall())  //if lift is not at call floor
-                    this.goCallFloor();
-
-                if(getCall() > getDest()){  //elevator go downwards
-                    this.moveDown();
-                }else if (getCall() < getDest()){   //elevator go upwards
-                    this.moveUp();
-                }else{
-                    System.out.println("Lift B is at Destination Floor");
+                    super.taskCount++;
+                    super.flag = true;
+                    notify();
                 }
+        }
             
-                taskCount++;
-            }else if(super.callArr.isEmpty()){
-                return;
-            }
-            super.bMoving = false;
       //  }
         
     }

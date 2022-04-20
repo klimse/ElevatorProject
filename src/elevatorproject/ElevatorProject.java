@@ -10,7 +10,9 @@ public class ElevatorProject {
     int total_weight, num_passengers;
     static ArrayList<Integer> callArr;  //test array to store call floors for elevator A
     static ArrayList<Integer> destArr;   //test array to store destination floors for elevator A
-    boolean aMoving = true, bMoving = false;
+    //boolean aMoving = true, bMoving = false;
+    boolean flag = false;
+    int taskCount = 1;
  
     public static void main(String[] args) {
 

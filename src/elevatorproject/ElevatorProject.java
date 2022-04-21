@@ -2,28 +2,20 @@
 package elevatorproject; 
 
 import java.util.ArrayList;
-import java.util.Arrays;
-
-
 
 public class ElevatorProject {
     static int MAXPASSENGERS = 3;
 
     //track passenger total weight and total num of passengers
     int total_weight, num_passengers;
-
+    static ArrayList<Integer> callArr;  //test array to store call floors for elevator A
+    static ArrayList<Integer> destArr;   //test array to store destination floors for elevator A
+    //boolean aMoving = true, bMoving = false;
+    boolean flag = false;
+    int taskCount = 1;
+ 
     public static void main(String[] args) {
 
-        // ArrayList<Integer> cArr = new ArrayList<Integer>(Arrays.asList(new Integer[]{4,2})) ;  //test array to store call floors for elevator A
-        // ArrayList<Integer> dArr = new ArrayList<Integer>(Arrays.asList(new Integer[]{1,3}));   //test array to store destination floors for elevator A
-        
-        // ArrayList<Integer> cArrB = new ArrayList<Integer>(Arrays.asList(new Integer[]{4,2})) ; //test array to store call floors for elevator B
-        // ArrayList<Integer> dArrB = new ArrayList<Integer>(Arrays.asList(new Integer[]{2,4})) ; //test array to store call floors for elevator B
-
-        // elevatorA eA = new elevatorA(cArr, dArr, 'A');
-        // elevatorB eB = new elevatorB(cArrB, dArrB, 'B');
-        
-        
         //Passengers[] psgs = new Passengers[MAXPASSENGERS]; //array of *3* passengers 
 
         //create *3* passengers
@@ -36,17 +28,31 @@ public class ElevatorProject {
         // //  System.out.println(psgs[i].getDestFloor());
         // //  System.out.println(psgs[i].dest_dir);
         // }
+        //setArr();   //setting call and dest arrays
 
-        elevatorController eC = new elevatorController();
+        MutEx mutex = new MutEx();
 
-        elevatorA eA = new elevatorA('A');
-        elevatorA eB = new elevatorA('B');
+        elevatorA eA = new elevatorA('A', mutex);
+        elevatorB eB = new elevatorB('B', mutex);
+        testingclass testing = new testingclass(mutex);
         Thread elevA = new Thread(eA);
         Thread elevB = new Thread(eB);
-        
+        elevA.setName("ElevatorA");
+        elevB.setName("ElevatorB");
+
+        testing.start();
+ 
         elevA.start();
         elevB.start();
 
+
     }
+    
+    // //to set values for dest and call arrays
+    // public static void setArr(){
+    //     testingclass test = new testingclass();
+    //     callArr = test.getCallArr();
+    //     destArr = test.getDestArr();
+    // }
     
 }

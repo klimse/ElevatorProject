@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
+//Passenger Thread, generates randomized call, destination floors, passenger names, weights and equipment
 public class Passengers extends Thread
 {
     int weight_passenger, total_passweight, weight_equip, total_weight, call_floor, dest_floor;
